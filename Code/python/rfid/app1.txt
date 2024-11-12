@@ -1,0 +1,37 @@
+from flask import Flask, render_template
+import paho.mqtt.client as mqtt
+from datetime import datetime
+import threading
+
+app = Flask(__name__)
+
+# Variable pour stocker les données RFID
+rfid_data = []
+
+# Configuration MQTT
+mqtt_broker = "192.168.223.170"
+mqtt_topic = "rfid"
+
+def on_message(client, userdata, message):
+    global rfid_data
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    rfid_data.append((timestamp, message.payload.decode("utf-8")))
+    print(f"Message reçu : {message.payload.decode('utf-8')} à {timestamp}")
+    print(f"Données RFID actuelles : {rfid_data}")
+
+def mqtt_loop():
+    mqtt_client = mqtt.Client()
+    mqtt_client.on_message = on_message
+    mqtt_client.username_pw_set("grp10", "admin")  # Assurez-vous d'ajouter cela pour les identifiants
+    mqtt_client.connect(mqtt_broker)
+    mqtt_client.subscribe(mqtt_topic)
+    mqtt_client.loop_forever()
+
+@app.route('/')
+def index():
+    return render_template('index.html', rfid_data=rfid_data)
+
+if __name__ == '__main__':
+    # Démarrer le thread MQTT
+    threading.Thread(target=mqtt_loop, daemon=True).start()
+    app.run(host='0.0.0.0', port=8080, debug=True)  # Démarrer le serveur Flask

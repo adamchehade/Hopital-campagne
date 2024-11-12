@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Données RFID</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #007BFF;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .inconnu {
+            color: red;  /* Texte en rouge pour les accès inconnus */
+        }
+        .alert {
+            display: none;  /* Cacher par défaut */
+            padding: 10px;
+            background-color: #f8d7da; /* Couleur de fond de l'alerte */
+            color: #721c24; /* Couleur du texte de l'alerte */
+            border: 1px solid #f5c6cb; /* Bordure de l'alerte */
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+    <script>
+        function refreshPage() {
+            setTimeout(function() {
+                location.reload();
+            }, 5000); // Rafraîchir la page toutes les 5 secondes
+        }
+
+        function showAlert() {
+            const alertBox = document.getElementById('alert');
+            alertBox.style.display = 'block'; // Afficher la boîte d'alerte
+            setTimeout(function() {
+                alertBox.style.display = 'none'; // Cacher après 5 secondes
+            }, 5000); // Dure 5 secondes
+        }
+    </script>
+</head>
+<body onload="refreshPage()">
+    <h1>Données RFID</h1>
+
+    <div id="alert" class="alert">Accès non autorisé détecté !</div>
+
+    <ul>
+        {% for timestamp, message in rfid_data %}
+            <li class="{{ 'inconnu' if 'Inconnu' in message else '' }}">
+                {{ timestamp }} : {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        // Vérifier si un message "Inconnu" est présent dans la liste
+        const messages = {{ rfid_data|tojson }};
+        const unknownMessageExists = messages.some(msg => msg[1].includes("Inconnu"));
+        if (unknownMessageExists) {
+            showAlert();
+        }
+    </script>
+</body>
+</html>

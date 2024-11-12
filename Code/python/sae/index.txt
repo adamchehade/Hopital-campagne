@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Données des capteurs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        #sensor-data {
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        .sensor-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .sensor-label {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .normal {
+            color: #4CAF50; /* Vert */
+        }
+        .high {
+            color: #f44336; /* Rouge */
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function fetchData() {
+            $.getJSON('/data', function(data) {
+                $('#sensor-data').empty(); // Effacer les données précédentes
+                // Ajouter les nouvelles données au conteneur
+                $('#sensor-data').append('<div class="sensor-item"><span class="sensor-label">Valeur du capteur MQ135 :</span> <span class="' + (data.gasLevel === 'Élevée' ? 'high' : 'normal') + '">' + data.mq135Value + '</span></div>');
+                $('#sensor-data').append('<div class="sensor-item"><span class="sensor-label">Niveau de gaz :</span> <span class="' + (data.gasLevel === 'Élevée' ? 'high' : 'normal') + '">' + data.gasLevel + '</span></div>');
+                $('#sensor-data').append('<div class="sensor-item"><span class="sensor-label">Humidité :</span> ' + data.humidity + '%</div>');
+                $('#sensor-data').append('<div class="sensor-item"><span class="sensor-label">Température :</span> ' + data.temperature + '°C</div>');
+            }).fail(function() {
+                $('#sensor-data').html('<p style="color: red;">Erreur lors de la récupération des données. Vérifiez la connexion au serveur.</p>');
+            });
+        }
+
+        $(document).ready(function() {
+            fetchData(); // Charger les données immédiatement lors du chargement de la page
+            setInterval(fetchData, 5000); // Mettre à jour les données toutes les 5 secondes
+        });
+    </script>
+</head>
+<body>
+    <h1>Données des capteurs en temps réel</h1>
+    <div id="sensor-data"></div>
+</body>
+</html>

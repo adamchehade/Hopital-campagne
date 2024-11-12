@@ -1,0 +1,35 @@
+from flask import Flask, render_template, jsonify
+import paho.mqtt.client as mqtt
+import json
+
+# Créer une instance de Flask
+app = Flask(__name__)
+
+# Variables globales pour stocker les données des capteurs
+sensor_data = {}
+
+# Fonction de rappel lorsque le client MQTT reçoit un message
+def on_message(client, userdata, message):
+    global sensor_data
+    data = message.payload.decode("utf-8")
+    print("Données reçues : ", data)  # Afficher les données reçues
+    sensor_data = json.loads(data)
+
+# Initialiser le client MQTT
+mqtt_client = mqtt.Client()
+mqtt_client.username_pw_set("grp10", "admin")  # Authentification MQTT
+mqtt_client.on_message = on_message
+mqtt_client.connect("192.168.223.170", 1883, 60)  # Connexion au broker MQTT
+mqtt_client.subscribe("sensors/data")  # S'abonner au topic
+mqtt_client.loop_start()  # Commencer à écouter les messages
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/data')
+def data():
+    return jsonify(sensor_data)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
