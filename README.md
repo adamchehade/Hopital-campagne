@@ -1,38 +1,39 @@
-
-Voici un exemple de README pour votre projet :
-
 Projet : Hôpital de Campagne - Surveillance IoT
-Ce projet met en œuvre une solution IoT complète pour surveiller et collecter des données environnementales dans un hôpital de campagne. Grâce à l'intégration de capteurs et d'une Raspberry Pi, les données sont transmises en temps réel via MQTT et affichées sur un site web pour un suivi efficace.
+Ce projet propose une solution IoT complète pour surveiller les conditions environnementales et gérer les accès dans un hôpital de campagne. À l'aide de capteurs connectés à une Raspberry Pi, les données sont transmises en temps réel via MQTT et affichées sur un site web pour une visualisation efficace et intuitive.
 
 Objectif du projet
-L'objectif est de fournir une infrastructure légère et fiable pour surveiller les conditions environnementales et gérer les accès dans un environnement critique comme un hôpital de campagne. Cette solution améliore la gestion et la prise de décision grâce à la visualisation en temps réel des données collectées.
+L'objectif principal est d'assurer une surveillance fiable des paramètres critiques dans un environnement hospitalier temporaire, tout en facilitant la gestion des accès grâce à des systèmes connectés.
 
 Fonctionnalités
-Capteurs intégrés :
-
-Température et Humidité : Suivi des conditions climatiques à l'aide du capteur DHT11.
-Détection de Mouvement : Surveillance des mouvements à l'intérieur des zones sensibles avec un capteur PIR.
-Identification RFID : Gestion des accès avec un lecteur PN532.
-Collecte et transmission des données :
-
-Les données des capteurs sont récupérées par une Raspberry Pi.
-Transmission des données via le protocole MQTT avec authentification pour garantir la sécurité.
-Visualisation des données :
-
-Affichage des données en temps réel sur un site web.
-Historique des passages RFID avec horodatage.
-Alerte visuelle pour les événements spécifiques, comme une détection de mouvement ou un accès non autorisé.
+1. Collecte des données
+Capteur de Température et Humidité (DHT11) :
+Surveillance continue des conditions climatiques.
+Capteur de Mouvement (PIR) :
+Détection des mouvements dans les zones sensibles.
+Lecteur RFID (PN532) :
+Gestion des accès sécurisés pour le personnel autorisé.
+2. Communication et Sécurité
+Les données des capteurs sont collectées par une Raspberry Pi.
+Transmission via le protocole MQTT, avec authentification par nom d'utilisateur et mot de passe pour garantir la sécurité des données.
+3. Visualisation des données
+Site Web en temps réel :
+Interface utilisateur développée avec Python Flask.
+Affichage en temps réel des données de température, humidité, détection de mouvement et événements RFID.
+Historique des accès RFID avec date et heure.
+Alertes automatiques :
+Notifications en cas de détection de mouvement ou d'accès non autorisé.
 Architecture du projet
-Capteurs et Collecte des données :
-Les capteurs connectés à une Raspberry Pi collectent les données environnementales et les événements d'accès.
-Communication via MQTT :
-Les données sont transmises en utilisant MQTT pour une communication rapide et sécurisée.
-Affichage Web :
-Un site web basé sur Python Flask permet la visualisation en temps réel des données.
-Mise à jour automatique de l'interface pour refléter les données les plus récentes.
+Capteurs connectés :
+
+Les capteurs DHT11, PIR et le lecteur RFID PN532 collectent les données essentielles.
+Traitement des données :
+
+Les données sont centralisées sur une Raspberry Pi, qui les transmet au serveur via MQTT.
+Affichage web :
+
+Les données sont visualisées en temps réel sur un site web auto-actualisé.
+Le site inclut un historique des événements et une interface utilisateur simple et attrayante.
 Cas d'utilisation
-Suivi des conditions environnementales dans les tentes ou structures de l'hôpital.
-Gestion des accès des personnels autorisés grâce à l'identification RFID.
-
-
-
+Suivi en temps réel des paramètres environnementaux dans un hôpital de campagne.
+Gestion sécurisée des accès grâce à l'identification RFID.
+Détection rapide des intrusions dans les zones sensibles pour améliorer la sécurité.
